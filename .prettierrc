@@ -1,0 +1,29 @@
+{
+    "tabWidth": 4,
+    "printWidth": 80,
+    "semi": true,
+    "useTabs": false,
+    "overrides": [
+        {
+            "files": "*.html",
+            "options": {
+                "tabWidth": 2,
+                "printWidth": 120
+            }
+        },
+        {
+            "files": "*.json",
+            "options": {
+                "tabWidth": 2,
+                "printWidth": 80
+            }
+        },
+        {
+            "files": "*.js",
+            "options": {
+                "tabWidth": 2,
+                "printWidth": 80
+            }
+        }
+    ]
+}

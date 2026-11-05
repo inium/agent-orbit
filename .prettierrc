@@ -24,6 +24,13 @@
                 "tabWidth": 2,
                 "printWidth": 80
             }
+        },
+        {
+            "files": "*.css",
+            "options": {
+                "tabWidth": 2,
+                "printWidth": 80
+            }
         }
     ]
 }

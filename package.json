@@ -9,7 +9,7 @@
     "format:check": "prettier --check ."
   },
   "lint-staged": {
-    "*": "prettier --write --ignore-unknown"
+    "*.{js,cjs,mjs,jsx,ts,tsx,json,html,css,scss,sass,less,md,mdx,yaml,yml,toml,svg}": "prettier --write --ignore-unknown"
   },
   "devDependencies": {
     "@commitlint/cli": "21.2.4",

@@ -1,0 +1,14 @@
+{
+  "conventionalCommits.scopes": [
+    "web",
+    "api",
+    "agent",
+    "rag",
+    "prompts",
+    "data",
+    "infra",
+    "tooling",
+    "docs",
+    "repo"
+  ]
+}

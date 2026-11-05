@@ -1,0 +1,70 @@
+services:
+    web:
+        image: nginx:stable-alpine
+        container_name: orbit-web
+        ports:
+            - "16123:80"
+        volumes:
+            - ./web:/usr/share/nginx/html:ro
+        networks:
+            - orbit-network
+
+    agent:
+        build:
+            context: ./agent
+            dockerfile: Dockerfile
+        image: orbit/agent:dev
+        container_name: orbit-agent
+        working_dir: /workspace/agent
+        env_file:
+            - .env
+        volumes:
+            - ./agent:/workspace/agent
+            - ./data:/workspace/data:ro
+        ports:
+            - "16124:8000"
+        init: true
+        # for fastapi
+        command: uvicorn app.main:app --app-dir src --host 0.0.0.0 --port 8000
+        networks:
+            - orbit-network
+
+    vector-db:
+        image: pgvector/pgvector:pg18-trixie
+        container_name: orbit-vector-db
+        restart: always
+        volumes:
+            - orbit-vector-db-data:/var/lib/postgresql
+        ports:
+            - "16125:5432"
+        environment:
+            - POSTGRES_USER=${VECTOR_DB_USERNAME}
+            - POSTGRES_PASSWORD=${VECTOR_DB_PASSWORD}
+            - POSTGRES_DB=${VECTOR_DB_DATABASE}
+        command: ["postgres"]
+        networks:
+            - orbit-network
+
+    memory-db:
+        image: pgvector/pgvector:pg18-trixie
+        container_name: orbit-memory-db
+        restart: always
+        volumes:
+            - orbit-memory-db-data:/var/lib/postgresql
+        ports:
+            - "16126:5432"
+        environment:
+            - POSTGRES_USER=${MEMORY_DB_USERNAME}
+            - POSTGRES_PASSWORD=${MEMORY_DB_PASSWORD}
+            - POSTGRES_DB=${MEMORY_DB_DATABASE}
+        command: ["postgres"]
+        networks:
+            - orbit-network
+
+networks:
+    orbit-network:
+        driver: bridge
+
+volumes:
+    orbit-vector-db-data:
+    orbit-memory-db-data:

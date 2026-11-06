@@ -49,11 +49,19 @@ class OpenAIModel(BaseSettings):
         Returns:
             지정한 temperature가 적용된 대화 모델 객체.
         """
+
+        # streaming_options는 OpenAI 모델일 경우에만 stream_usage를 True로 설정합니다.
+        # stream_usage 옵션은 LangChain에서 OpenAI 모델을 스트리밍 모드로 사용할 수 있게 해줍니다.
+        streaming_options = (
+            {"stream_usage": True} if self.model_provider == "openai" else {}
+        )
+
         return init_chat_model(
             model=self.model,
             model_provider=self.model_provider,
             api_key=self.api_key.get_secret_value(),
             temperature=temperature,
+            **streaming_options,
         )
 
 

@@ -1,6 +1,7 @@
 from langchain.agents import create_agent
 from langchain_core.documents import Document
 from langchain_core.tools import StructuredTool
+from langchain_core.runnables import RunnableConfig
 from langchain_core.messages import ToolMessage, HumanMessage
 from app.config.model import openai_model
 from app.prompts.prompt_loader import PromptLoader
@@ -29,7 +30,7 @@ class MallAgent:
             답변을 content로, 검색된 원본 문서 목록을 artifact로 반환하는 도구.
         """
 
-        def ask(query: str) -> tuple[str, list[Document]]:
+        def ask(query: str, config: RunnableConfig) -> tuple[str, list[Document]]:
             """쇼핑몰 CS 질문을 처리하고 답변과 검색된 원본 문서를 반환합니다.
 
             Args:
@@ -39,7 +40,9 @@ class MallAgent:
                 마지막 답변의 텍스트와 도구 메시지에서 수집한 원본 문서 목록.
                 검색 문서가 없으면 문서 목록은 비어 있습니다.
             """
-            result = self.agent.invoke({"messages": [HumanMessage(query)]})
+            result = self.agent.invoke(
+                {"messages": [HumanMessage(query)]}, config=config
+            )
             documents = [
                 document
                 for message in result["messages"]

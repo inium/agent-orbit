@@ -1,6 +1,7 @@
 from langchain.agents import create_agent
 from langchain_core.documents import Document
 from langchain_core.tools import StructuredTool
+from langchain_core.runnables import RunnableConfig
 from langchain_core.messages import ToolMessage, HumanMessage
 from app.config.model import openai_model
 from app.prompts.prompt_loader import PromptLoader
@@ -33,9 +34,11 @@ class HumanResourceAgent:
             답변과 검색된 원본 문서 목록을 반환하는 인사 도구.
         """
 
-        def ask(query: str) -> tuple[str, list[Document]]:
+        def ask(query: str, config: RunnableConfig) -> tuple[str, list[Document]]:
             """인사 질문을 처리하고 답변과 검색 문서를 반환합니다."""
-            result = self.agent.invoke({"messages": [HumanMessage(query)]})
+            result = self.agent.invoke(
+                {"messages": [HumanMessage(query)]}, config=config
+            )
             documents = [
                 document
                 for message in result["messages"]

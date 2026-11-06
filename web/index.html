@@ -154,21 +154,109 @@
                     :class="message.role==='user'?'bg-indigo-600 text-white':message.role==='error'?'bg-red-50 text-red-600 border border-red-200':'bg-slate-50 border border-slate-100'"
                     x-text="message.text"
                   ></div>
-                  <button
+                  <div
                     x-show="message.role==='assistant'"
-                    @click="navigator.clipboard.writeText(message.text);copied=true;setTimeout(()=>copied=false,1500)"
-                    class="group relative mt-2 inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
-                    :aria-label="copied ? '복사했어요' : '복사'"
+                    x-data="{ usageVisible: false }"
+                    x-id="['token-usage', 'usage-toggle-tooltip']"
+                    class="mt-2 flex items-center gap-3"
                   >
-                    <span class="icon" :class="copied ? 'icon-check' : 'icon-copy'" aria-hidden="true"></span>
-                    <span
-                      role="tooltip"
-                      class="pointer-events-none absolute bottom-full left-1/2 mb-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
-                      x-text="copied ? '복사했어요' : '복사'"
-                    ></span>
-                  </button>
-                </div></div
-            ></template>
+                    <div class="flex shrink-0 items-center gap-1">
+                      <button
+                        @click="navigator.clipboard.writeText(message.text);copied=true;setTimeout(()=>copied=false,1500)"
+                        class="group relative inline-flex shrink-0 h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                        :aria-label="copied ? '복사했어요' : '복사'"
+                      >
+                        <span class="icon" :class="copied ? 'icon-check' : 'icon-copy'" aria-hidden="true"></span>
+                        <span
+                          role="tooltip"
+                          class="pointer-events-none absolute bottom-full left-1/2 mb-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+                          x-text="copied ? '복사했어요' : '복사'"
+                        ></span>
+                      </button>
+                      <button
+                        type="button"
+                        @click="usageVisible = !usageVisible"
+                        :disabled="!message.usage"
+                        :aria-expanded="usageVisible"
+                        :aria-controls="$id('token-usage')"
+                        :aria-describedby="$id('usage-toggle-tooltip')"
+                        :aria-label="usageVisible ? '토큰 사용량 숨기기' : '토큰 사용량 보기'"
+                        class="group relative inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed"
+                        :class="usageVisible ? 'bg-violet-50 text-violet-600 hover:bg-violet-100' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'"
+                      >
+                        <span
+                          class="icon shrink-0"
+                          style="--icon-url: url(/assets/icons/circle-info.svg)"
+                          aria-hidden="true"
+                        ></span>
+                        <span
+                          role="tooltip"
+                          :id="$id('usage-toggle-tooltip')"
+                          class="pointer-events-none invisible absolute bottom-full left-1/2 z-30 mb-1 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-visible:visible group-focus-visible:opacity-100"
+                          x-text="usageVisible ? '토큰 사용량 숨기기' : '토큰 사용량 보기'"
+                        ></span>
+                      </button>
+                    </div>
+                    <template x-if="message.role==='assistant' && message.usage">
+                      <p
+                        x-cloak
+                        x-show="usageVisible"
+                        :id="$id('token-usage')"
+                        class="min-w-0 text-xs leading-5 text-slate-400"
+                        aria-label="LLM 토큰 사용량"
+                      >
+                        <span>토큰 · </span>
+                        <button
+                          type="button"
+                          x-id="['token-tooltip']"
+                          :aria-describedby="$id('token-tooltip')"
+                          class="group relative inline-block cursor-help rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                        >
+                          <span>입력 </span><span x-text="message.usage.input_tokens.toLocaleString('ko-KR')"></span>
+                          <span
+                            role="tooltip"
+                            :id="$id('token-tooltip')"
+                            class="pointer-events-none invisible absolute bottom-full right-0 z-30 mb-2 w-56 max-w-[60vw] rounded-md bg-slate-800 px-3 py-2 text-left text-xs font-normal leading-5 text-white opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-visible:visible group-focus-visible:opacity-100"
+                            >질문, 이전 대화, 시스템 지침, 검색 문서 등을 AI에게 전달할 때 사용한 토큰 수예요.</span
+                          >
+                        </button>
+                        <span aria-hidden="true"> · </span>
+                        <button
+                          type="button"
+                          x-id="['token-tooltip']"
+                          :aria-describedby="$id('token-tooltip')"
+                          class="group relative inline-block cursor-help rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                        >
+                          <span>출력 </span><span x-text="message.usage.output_tokens.toLocaleString('ko-KR')"></span>
+                          <span
+                            role="tooltip"
+                            :id="$id('token-tooltip')"
+                            class="pointer-events-none invisible absolute bottom-full right-0 z-30 mb-2 w-56 max-w-[60vw] rounded-md bg-slate-800 px-3 py-2 text-left text-xs font-normal leading-5 text-white opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-visible:visible group-focus-visible:opacity-100"
+                            >AI가 답변을 만들거나 도구를 호출할 때 사용한 토큰 수예요.</span
+                          >
+                        </button>
+                        <span aria-hidden="true"> · </span>
+                        <button
+                          type="button"
+                          x-id="['token-tooltip']"
+                          :aria-describedby="$id('token-tooltip')"
+                          class="group relative inline-block cursor-help rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                        >
+                          <span>합계 </span><span x-text="message.usage.total_tokens.toLocaleString('ko-KR')"></span>
+                          <span
+                            role="tooltip"
+                            :id="$id('token-tooltip')"
+                            class="pointer-events-none invisible absolute bottom-full right-0 z-30 mb-2 w-56 max-w-[60vw] rounded-md bg-slate-800 px-3 py-2 text-left text-xs font-normal leading-5 text-white opacity-0 transition-opacity group-hover:visible group-hover:opacity-100 group-focus-visible:visible group-focus-visible:opacity-100"
+                            >이번 요청에서 모든 에이전트가 사용한 입력·출력 토큰을 더한 값이에요. 임베딩 토큰은 포함되지
+                            않아요.</span
+                          >
+                        </button>
+                      </p>
+                    </template>
+                  </div>
+                </div>
+              </div></template
+            >
             <p x-show="loading" class="text-sm text-indigo-500 animate-pulse">✳ 답변을 준비하고 있어요...</p>
           </div>
         </section>

@@ -28,6 +28,7 @@ export default class ChatApp {
    *
    * @param {Response} response - fetch 요청의 Response 객체
    * @param {function(string): void} onText - 새로운 텍스트를 처리하는 콜백 함수
+   * @returns {Promise<Object|null>} 완료 이벤트의 LLM 토큰 사용량
    */
   static async readAgentStream(response, onText) {
     if (!response.body) {
@@ -38,6 +39,7 @@ export default class ChatApp {
     const decoder = new TextDecoder();
     let buffer = "";
     let finished = false;
+    let usage = null;
 
     function handleEvent(block) {
       let event = "message";
@@ -57,7 +59,23 @@ export default class ChatApp {
       }
 
       if (event === "done" || payload === "[DONE]") {
+        if (event === "done" && payload && payload !== "[DONE]") {
+          const data = JSON.parse(payload);
+          const reportedUsage = data?.usage;
+          if (
+            reportedUsage &&
+            ["input_tokens", "output_tokens", "total_tokens"].every(
+              (key) =>
+                Number.isSafeInteger(reportedUsage[key]) &&
+                reportedUsage[key] >= 0,
+            )
+          ) {
+            usage = reportedUsage;
+          }
+        }
+
         finished = true;
+
         return;
       }
 
@@ -125,6 +143,8 @@ export default class ChatApp {
         reader.releaseLock();
       }
     }
+
+    return usage;
   }
 
   /**
@@ -324,7 +344,7 @@ export default class ChatApp {
 
       // SSE 응답을 읽고 처리하며, 답변 메시지를 대화방에 추가
       let answerIndex = null;
-      await ChatApp.readAgentStream(response, (text) => {
+      const usage = await ChatApp.readAgentStream(response, (text) => {
         // 새로운 텍스트가 없으면 처리하지 않음
         if (!text) {
           return;
@@ -333,7 +353,7 @@ export default class ChatApp {
         // 답변 메시지가 없으면 새 메시지를 추가하고 인덱스를 저장
         if (answerIndex === null) {
           answerIndex = room.messages.length;
-          room.messages.push({ role: "assistant", text: "" });
+          room.messages.push({ role: "assistant", text: "", usage: null });
         }
 
         room.messages[answerIndex].text += text;
@@ -347,6 +367,8 @@ export default class ChatApp {
       if (answerIndex === null) {
         throw new Error("에이전트가 빈 답변을 반환했습니다.");
       }
+
+      room.messages[answerIndex].usage = usage;
     } catch (error) {
       // 에러 발생 시 대화방에 오류 메시지 추가
       room.messages.push({

@@ -1,0 +1,31 @@
+{
+  "name": "agent-orbit",
+  "dockerComposeFile": ["../docker-compose-local.yml", "docker-compose.yml"],
+  "service": "agent",
+  "workspaceFolder": "/workspace",
+  "overrideCommand": false,
+  "initializeCommand": ["sh", ".devcontainer/initialize.sh"],
+  "runServices": ["agent", "web", "vector-db", "memory-db"],
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "esbenp.prettier-vscode",
+        "EditorConfig.EditorConfig",
+        "ms-python.black-formatter",
+        "mhutchie.git-graph",
+        "vivaxy.vscode-conventional-commits",
+        "eamodio.gitlens",
+        "ms-ossdata.vscode-pgsql",
+        "tomoki1207.pdf",
+        "codezombiech.gitignore",
+        "openai.chatgpt"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/venv/bin/python"
+      }
+    }
+  }
+}

@@ -5,7 +5,7 @@ from app.rag.vector_store.document_importer import DocumentImporter
 
 def main():
     # 실행 위치와 관계없이 프로젝트 루트의 data 폴더를 참조합니다.
-    data_dir = Path(__file__).resolve().parents[3] / "data"
+    data_dir = Path(__file__).resolve().parents[2] / "data"
     files = [
         {
             "path": data_dir / "취업규칙 - (주)길동상사.pdf",

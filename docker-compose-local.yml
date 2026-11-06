@@ -11,15 +11,15 @@ services:
 
   agent:
     build:
-      context: ./agent
+      context: .
       dockerfile: Dockerfile
     image: orbit/agent:dev
     container_name: orbit-agent
-    working_dir: /workspace/agent
+    working_dir: /workspace
     env_file:
       - .env
     volumes:
-      - ./agent:/workspace/agent
+      - ./src:/workspace/src
       - ./data:/workspace/data:ro
     ports:
       - "16124:8000"

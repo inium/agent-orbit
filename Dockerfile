@@ -17,13 +17,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgraphviz-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /workspace/agent
+WORKDIR /workspace
 
 COPY pyproject.toml uv.lock ./
 RUN uv sync --locked --no-dev --no-install-project
 
 # 실제 소스 코드는 compose의 volume으로 마운트합니다.
-VOLUME ["/workspace/agent"]
+VOLUME ["/workspace/src"]
 
 EXPOSE 8000
 

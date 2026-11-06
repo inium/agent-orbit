@@ -21,7 +21,7 @@ class VectorStore(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file=Path(__file__).resolve().parents[4] / ".env",
+        env_file=Path(__file__).resolve().parents[3] / ".env",
         env_prefix="VECTOR_DB_",
         env_file_encoding="utf-8",
         case_sensitive=False,

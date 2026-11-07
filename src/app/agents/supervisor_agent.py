@@ -2,7 +2,9 @@ from langchain.agents import create_agent
 from langchain_core.tools import StructuredTool
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.checkpoint.base import BaseCheckpointSaver
+from langchain.agents.middleware import SummarizationMiddleware
 from app.config.model import openai_model
+from app.config.summarization import summarization
 from app.prompts.prompt_loader import PromptLoader
 from app.tools import TimeTool, IntroductionTool
 from app.agents.human_resource_agent import HumanResourceAgent
@@ -29,7 +31,11 @@ class SupervisorAgent:
             model=model,
             tools=self.__get_tools(),
             system_prompt=PromptLoader.load_text("system.yaml"),
-            checkpointer = checkpointer
+            checkpointer=checkpointer,
+            middleware=[
+                # 요약 미들웨어
+                summarization.get_middleware()
+            ],
         )
 
     def __get_tools(self) -> list[StructuredTool]:

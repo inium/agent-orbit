@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Orbit — AI Workspace</title>
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="assets/icons/book.svg" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="assets/js/app.js"></script>
     <link href="assets/fonts/pretendard/pretendard.css" rel="stylesheet" />
     <link rel="stylesheet" href="assets/css/app.css" />
   </head>
   <body class="bg-white text-slate-800" x-data="orbitTheme">
-    <div class="flex h-screen overflow-hidden" x-data="chatApp()">
+    <div class="app-shell flex h-screen overflow-hidden" x-data="chatApp()">
       <aside
-        class="w-64 shrink-0 border-r border-slate-200 bg-[#f8f9fc] p-4 flex-col fixed left-0 inset-y-0 z-20 lg:static"
+        class="w-64 shrink-0 border-r border-slate-200 bg-slate-50 p-4 flex-col fixed left-0 inset-y-0 z-20 lg:static"
         :class="roomsOpen ? 'flex' : 'hidden lg:flex'"
         aria-label="대화방 목록"
       >
@@ -21,25 +21,27 @@
           href="#"
           aria-label="Orbit"
           @click.prevent="$refs.input.focus()"
-          class="flex items-center gap-2.5 px-2 pt-2 pb-7 text-2xl font-bold tracking-tight"
+          class="brand flex flex-col items-start gap-2 px-2 pt-2 pb-8 text-xl font-semibold"
         >
-          <span class="grid h-9 w-9 place-items-center rounded-xl bg-indigo-600 text-2xl text-white" aria-hidden="true"
-            >✳</span
-          >
           orbit
-          <!-- <span class="rounded-2xl border px-1.5 text-[10px] font-medium tracking-normal text-slate-400">BETA</span> -->
+          <span class="brand-caption">사내 업무 안내</span>
         </a>
-        <div class="flex items-center justify-between mb-5">
-          <button @click="roomsOpen=false" class="lg:hidden text-slate-400" aria-label="대화방 목록 닫기">✕</button>
+        <div class="flex items-center justify-between lg:hidden mb-4">
+          <button @click="roomsOpen=false" class="lg:hidden text-slate-400" aria-label="대화방 목록 닫기">
+            <span class="icon icon-close" aria-hidden="true"></span>
+          </button>
         </div>
-        <button @click="createRoom()" class="bg-indigo-600 text-white rounded-lg p-3 text-sm font-semibold">
-          ＋ 새로운 대화
+        <button
+          @click="createRoom()"
+          class="new-chat flex items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium"
+        >
+          <span class="icon icon-plus" aria-hidden="true"></span> 새 대화
         </button>
-        <div class="mt-5 flex-1 overflow-y-auto space-y-2">
+        <div class="mt-6 flex-1 overflow-y-auto space-y-1">
           <template x-for="room in rooms" :key="room.id">
             <div
               class="flex items-center rounded-xl border"
-              :class="activeId===room.id ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-white border-transparent text-slate-500 hover:border-slate-200'"
+              :class="activeId===room.id ? 'bg-slate-100 border-slate-200 text-slate-800' : 'bg-white border-transparent text-slate-500 hover:border-slate-200'"
             >
               <button
                 @click="selectRoom(room.id)"
@@ -48,7 +50,7 @@
               >
                 <span class="block truncate text-sm font-medium" x-text="room.title"></span>
                 <span
-                  class="block text-xs mt-2 opacity-60"
+                  class="block text-xs mt-1 text-slate-400"
                   x-text="room.loading ? '답변 작성 중…' : room.messages.length + '개의 메시지'"
                 ></span>
               </button>
@@ -65,16 +67,17 @@
         </div>
       </aside>
       <main class="flex-1 flex flex-col min-w-0">
-        <header class="h-20 shrink-0 border-b border-slate-100 flex items-center justify-between px-6 md:px-10">
+        <header class="h-16 shrink-0 border-b border-slate-100 flex items-center justify-between px-6 md:px-10">
           <div class="flex items-center gap-3">
-            <button class="lg:hidden" @click="roomsOpen=!roomsOpen" aria-label="대화방 목록 열기">☰</button
-            ><span class="text-sm font-semibold">AI 어시스턴트</span
-            ><span class="rounded-full bg-emerald-50 text-emerald-600 px-2 py-1 text-[10px]">● 온라인</span>
+            <button class="lg:hidden" @click="roomsOpen=!roomsOpen" aria-label="대화방 목록 열기">
+              <span class="icon icon-menu" aria-hidden="true"></span></button
+            ><span class="text-sm font-semibold">업무 안내 데스크</span
+            ><span class="header-note hidden sm:inline text-xs text-slate-400">규정 · 매뉴얼</span>
           </div>
           <div class="flex gap-4 items-center">
             <div class="theme-switch flex gap-1 rounded-xl bg-slate-100 p-1" role="group" aria-label="화면 테마 선택">
               <template
-                x-for="option in [{value:'light',label:'Light',icon:'☀'},{value:'dark',label:'Dark',icon:'☾'},{value:'system',label:'System',icon:'▣'}]"
+                x-for="option in [{value:'light',label:'밝게',icon:'icon-sun'},{value:'dark',label:'어둡게',icon:'icon-moon'},{value:'system',label:'시스템',icon:'icon-monitor'}]"
                 :key="option.value"
               >
                 <button
@@ -82,73 +85,62 @@
                   :aria-pressed="theme===option.value"
                   :aria-label="option.label"
                   :title="option.label"
-                  class="cursor-pointer rounded-lg px-2 py-2 text-xs"
+                  class="inline-flex items-center gap-2 rounded-lg p-2 text-xs"
                   :class="theme===option.value ? 'theme-selected bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'"
                 >
-                  <span aria-hidden="true" x-text="option.icon"></span>
+                  <span class="icon" :class="option.icon" aria-hidden="true"></span>
                   <span class="hidden sm:inline" x-text="option.label"></span>
                 </button>
               </template>
             </div>
           </div>
         </header>
-        <section class="flex-1 overflow-y-auto px-5" id="conversation" aria-live="polite">
-          <div x-show="!messages.length" class="max-w-3xl mx-auto pt-14 md:pt-20 pb-8">
-            <div
-              class="w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-100 grid place-items-center text-indigo-600 text-4xl shadow-sm mb-7"
-            >
-              ✳
-            </div>
-            <h1 class="text-3xl md:text-[38px] font-semibold tracking-tight leading-tight">
-              반가워요!<br /><span class="text-slate-400">오늘은 무엇을 함께 할까요?</span>
-            </h1>
-            <p class="text-sm text-slate-400 mt-5">
-              사내 규정부터 쇼핑몰 고객 응대까지, 궁금한 업무 기준을 물어보세요.
-            </p>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-10">
-              <template x-for="card in cards"
+        <section class="flex-1 min-h-0 overflow-y-auto px-6 md:px-8" id="conversation" aria-live="polite">
+          <div x-show="!messages.length" class="welcome mx-auto pt-12 md:pt-16 pb-8">
+            <p class="section-label text-xs text-slate-500 mb-4">Orbit / 길동상사 업무 안내</p>
+            <h1 class="text-3xl md:text-4xl font-medium leading-tight">업무의 기준이 필요할 때</h1>
+            <p class="text-sm text-slate-500 mt-4 leading-6">사내 규정과 쇼핑몰 매뉴얼에서 필요한 내용을 찾아보세요</p>
+            <div class="service-grid grid grid-cols-2 sm:grid-cols-3 gap-3 mt-8">
+              <template x-for="(card, index) in cards" :key="card.title"
                 ><button
                   @click="prompt=card.prompt;$refs.input.focus()"
-                  class="card transition text-left border border-slate-200 rounded-xl p-5 bg-white"
+                  class="card text-left border border-slate-200 rounded-xl p-5 bg-white"
                 >
-                  <span
-                    class="w-9 h-9 rounded-lg grid place-items-center text-lg"
-                    :class="card.color"
-                    x-text="card.icon"
-                  ></span>
-                  <h2 class="font-semibold text-sm mt-5" x-text="card.title"></h2>
-                  <p class="text-xs leading-5 text-slate-400 mt-2" x-text="card.desc"></p>
-                  <div class="mt-4 text-slate-400 text-sm">↗</div>
-                </button></template
-              >
+                  <div class="card-index flex items-center justify-between text-slate-400">
+                    <span class="tabular-nums" x-text="String(index + 1).padStart(2, '0')"></span>
+                    <span class="icon icon-arrow-up-right" aria-hidden="true"></span>
+                  </div>
+                  <h2 class="font-medium text-sm mt-6" x-text="card.title"></h2>
+                  <p class="text-sm leading-6 text-slate-500 mt-2" x-text="card.desc"></p></button
+              ></template>
             </div>
-            <div class="mt-7 flex flex-wrap gap-2 items-center text-xs text-slate-400">
-              <span class="mr-1">이렇게 시작해 보세요</span
+            <div class="mt-6 flex flex-wrap gap-2 items-center text-xs text-slate-400">
+              <span class="mr-1">다른 질문</span
               ><button
                 @click="prompt='뉴욕과 런던의 현재 시간을 알려 주세요';$refs.input.focus()"
-                class="border rounded-full px-3 py-1.5"
+                class="border rounded-lg px-3 py-2"
               >
                 해외 현재 시간</button
               ><button
                 @click="prompt='어떤 업무를 도와줄 수 있는지 알려 주세요';$refs.input.focus()"
-                class="border rounded-full px-3 py-1.5"
+                class="border rounded-lg px-3 py-2"
               >
                 도움받을 수 있는 일
               </button>
             </div>
           </div>
-          <div x-cloak x-show="messages.length" class="max-w-3xl mx-auto py-10 space-y-7">
+          <div x-cloak x-show="messages.length" class="conversation-content mx-auto py-8 space-y-8">
             <template x-for="message in messages"
               ><div class="flex gap-3" :class="message.role==='user'?'justify-end':''">
                 <span
                   x-show="message.role==='assistant'"
-                  class="bg-indigo-50 text-indigo-600 rounded-lg w-8 h-8 grid place-items-center shrink-0"
-                  >✳</span
-                >
+                  class="assistant-mark rounded-lg w-8 h-8 grid place-items-center shrink-0"
+                  ><span class="icon icon-book" aria-hidden="true"></span
+                ></span>
                 <div class="max-w-[85%]">
                   <div
                     class="text-sm leading-7 whitespace-pre-wrap rounded-2xl p-4"
-                    :class="message.role==='user'?'bg-indigo-600 text-white':message.role==='error'?'bg-red-50 text-red-600 border border-red-200':'bg-slate-50 border border-slate-100'"
+                    :class="message.role==='user'?'user-message bg-slate-100 text-slate-800':message.role==='error'?'bg-red-50 text-red-600 border border-red-200':'bg-slate-50 border border-slate-100'"
                     x-text="message.text"
                   ></div>
                   <div
@@ -179,7 +171,7 @@
                         :aria-describedby="$id('usage-toggle-tooltip')"
                         :aria-label="usageVisible ? '토큰 사용량 숨기기' : '토큰 사용량 보기'"
                         class="group relative inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed"
-                        :class="usageVisible ? 'bg-violet-50 text-violet-600 hover:bg-violet-100' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'"
+                        :class="usageVisible ? 'bg-slate-100 text-slate-800 hover:bg-slate-100' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'"
                       >
                         <span
                           class="icon shrink-0"
@@ -199,7 +191,7 @@
                         x-cloak
                         x-show="usageVisible"
                         :id="$id('token-usage')"
-                        class="min-w-0 text-xs leading-5 text-slate-400"
+                        class="min-w-0 text-xs leading-5 text-slate-400 tabular-nums"
                         aria-label="LLM 토큰 사용량"
                       >
                         <span>토큰 · </span>
@@ -254,21 +246,18 @@
                 </div>
               </div></template
             >
-            <p x-show="loading" class="text-sm text-indigo-500 animate-pulse">✳ 답변을 준비하고 있어요...</p>
+            <p x-show="loading" class="text-sm text-slate-500" role="status">자료를 확인하고 있습니다…</p>
           </div>
         </section>
-        <div class="px-5 pb-5 pt-4">
-          <form
-            @submit.prevent="send()"
-            class="max-w-3xl mx-auto border border-slate-200 rounded-2xl shadow-[0_4px_24px_#1e293b08] p-4 bg-white focus-within:border-indigo-300"
-          >
+        <div class="composer-area px-6 md:px-8 pb-4 pt-4">
+          <form @submit.prevent="send()" class="composer mx-auto border border-slate-200 rounded-2xl p-4 bg-white">
             <textarea
               x-ref="input"
               x-model="prompt"
               @keydown.enter="if(!$event.isComposing && !$event.shiftKey){$event.preventDefault();send()}"
               :rows="Math.max(2, prompt.split('\n').length)"
               aria-label="메시지"
-              placeholder="무엇이든 물어보세요. 함께 해결해 봐요. (Shift + Enter: 줄바꿈)"
+              placeholder="업무 질문이나 요약할 텍스트를 입력하세요"
               class="w-full resize-none text-sm outline-none placeholder:text-slate-400 leading-6"
             ></textarea>
             <div class="flex items-center justify-between mt-3">
@@ -279,7 +268,7 @@
                     aria-label="응답 스타일"
                     class="cursor-pointer appearance-none bg-slate-50 border border-slate-100 rounded-lg py-2 pl-3 pr-9 text-xs text-slate-600"
                   >
-                    <option>✧ 균형 잡힌 답변</option>
+                    <option value="균형 잡힌 답변">균형 잡힌 답변</option>
                     <option disabled>창의적인 답변</option>
                     <option disabled>간결한 답변</option>
                   </select>
@@ -288,22 +277,29 @@
                     aria-hidden="true"
                   ></span>
                 </div>
-                <!-- <span class="hidden sm:block text-[10px] text-slate-400">데모 모드</span> -->
               </div>
+              <span class="hidden sm:inline text-xs text-slate-400 pt-2">
+                줄바꿈 <kbd>Shift</kbd> + <kbd>Enter</kbd>
+              </span>
               <button
                 type="submit"
                 :disabled="!prompt.trim()||loading"
                 aria-label="메시지 보내기"
-                class="w-7 h-7 rounded-full bg-indigo-600 text-white text-xl disabled:opacity-30"
+                class="send-button w-8 h-8 rounded-lg bg-indigo-600 text-white inline-flex items-center justify-center disabled:opacity-30"
               >
-                ↑
+                <span class="icon icon-arrow-up" aria-hidden="true"></span>
               </button>
             </div>
           </form>
-          <p class="text-center text-[10px] text-slate-400 mt-3">
-            Orbit은 실수할 수 있어요. 중요한 정보는 다시 확인해 주세요.
+          <p class="composer-note text-center text-xs text-slate-400 mt-3 leading-5">
+            중요한 업무 판단에는 답변의 원문 근거를 확인하세요
             <span class="mx-1">·</span>
-            <a href="https://www.penguinui.com/ai-components" class="text-indigo-500 hover:underline" target="_blank">
+            <a
+              href="https://www.penguinui.com/ai-components"
+              class="text-indigo-500 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Powered by Penguin UI
             </a>
           </p>

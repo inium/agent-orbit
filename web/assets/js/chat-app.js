@@ -15,7 +15,7 @@ export default class ChatApp {
     });
 
     this.prompt = ""; // 현재 입력 중인 질문
-    this.mode = "✧ 균형 잡힌 답변"; // 현재 선택된 답변 모드
+    this.mode = "균형 잡힌 답변"; // 현재 선택된 답변 모드
     this.roomsOpen = false; // 대화방 목록 열림 여부
     this.rooms = []; // 대화방 목록
     this.activeId = null; // 현재 선택된 대화방의 UUID
@@ -193,48 +193,36 @@ export default class ChatApp {
   static createCards() {
     return [
       {
-        icon: "🗓️",
-        color: "bg-violet-50 text-violet-500",
         title: "휴가·근무 규정",
-        desc: "연차와 휴가, 근무 기준을 확인해요.",
+        desc: "연차와 휴가, 근무 기준을 확인해요",
         prompt: "연차휴가의 사용 기준과 신청 절차를 알려 주세요.",
       },
       {
-        icon: "✈️",
-        color: "bg-blue-50 text-blue-500",
         title: "출장비 안내",
-        desc: "출장비 지급 기준과 정산 방법을 알아봐요.",
+        desc: "출장비 지급 기준과 정산 방법을 알아봐요",
         prompt:
           "국내 2박 3일 출장의 여비 기준과 정산에 필요한 증빙을 알려 주세요.",
       },
       {
-        icon: "🎁",
-        color: "bg-pink-50 text-pink-500",
         title: "복리후생 안내",
-        desc: "복지 혜택과 지원 조건을 확인해요.",
+        desc: "복지 혜택과 지원 조건을 확인해요",
         prompt: "회사 복리후생의 지원 항목과 신청 조건을 알려 주세요.",
       },
       {
-        icon: "📦",
-        color: "bg-amber-50 text-amber-500",
         title: "주문·배송 응대",
-        desc: "주문과 배송 문의의 응대 절차를 확인해요.",
+        desc: "주문과 배송 문의의 응대 절차를 확인해요",
         prompt:
           "배송 지연 문의가 들어왔을 때 확인할 사항과 고객 안내 문구를 알려 주세요.",
       },
       {
-        icon: "🔄",
-        color: "bg-emerald-50 text-emerald-500",
         title: "취소·교환·반품",
-        desc: "처리 조건과 절차, 비용 기준을 알아봐요.",
+        desc: "처리 조건과 절차, 비용 기준을 알아봐요",
         prompt:
           "단순 변심 반품의 접수 조건과 절차, 배송비 부담 기준을 알려 주세요.",
       },
       {
-        icon: "💬",
-        color: "bg-indigo-50 text-indigo-500",
         title: "고객 불만 응대",
-        desc: "매뉴얼에 맞는 대응 방법을 찾아봐요.",
+        desc: "매뉴얼에 맞는 대응 방법을 찾아봐요",
         prompt:
           "상품 불량으로 불만을 제기한 고객의 응대 절차와 안내 문구를 알려 주세요.",
       },

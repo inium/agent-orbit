@@ -102,7 +102,9 @@
             <h1 class="text-3xl md:text-[38px] font-semibold tracking-tight leading-tight">
               반가워요!<br /><span class="text-slate-400">오늘은 무엇을 함께 할까요?</span>
             </h1>
-            <p class="text-sm text-slate-400 mt-5">작은 궁금증부터 커다란 아이디어까지, Orbit에게 이야기해 주세요.</p>
+            <p class="text-sm text-slate-400 mt-5">
+              사내 규정부터 쇼핑몰 고객 응대까지, 궁금한 업무 기준을 물어보세요.
+            </p>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-10">
               <template x-for="card in cards"
                 ><button
@@ -123,20 +125,15 @@
             <div class="mt-7 flex flex-wrap gap-2 items-center text-xs text-slate-400">
               <span class="mr-1">이렇게 시작해 보세요</span
               ><button
-                @click="prompt='이메일 초안을 작성해 주세요';$refs.input.focus()"
+                @click="prompt='뉴욕과 런던의 현재 시간을 알려 주세요';$refs.input.focus()"
                 class="border rounded-full px-3 py-1.5"
               >
-                이메일 작성</button
+                해외 현재 시간</button
               ><button
-                @click="prompt='새로운 프로젝트 아이디어를 제안해 주세요';$refs.input.focus()"
+                @click="prompt='어떤 업무를 도와줄 수 있는지 알려 주세요';$refs.input.focus()"
                 class="border rounded-full px-3 py-1.5"
               >
-                아이디어 브레인스토밍</button
-              ><button
-                @click="prompt='긴 글을 핵심만 요약해 주세요';$refs.input.focus()"
-                class="border rounded-full px-3 py-1.5"
-              >
-                텍스트 요약
+                도움받을 수 있는 일
               </button>
             </div>
           </div>

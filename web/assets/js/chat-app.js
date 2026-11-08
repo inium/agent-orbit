@@ -193,25 +193,50 @@ export default class ChatApp {
   static createCards() {
     return [
       {
-        icon: "✎",
+        icon: "🗓️",
         color: "bg-violet-50 text-violet-500",
-        title: "더 나은 글쓰기",
-        desc: "생각을 정리하고, 마음을 전하는 글을 함께 써요.",
-        prompt: "새 프로젝트를 소개하는 이메일 초안을 작성해 주세요.",
+        title: "휴가·근무 규정",
+        desc: "연차와 휴가, 근무 기준을 확인해요.",
+        prompt: "연차휴가의 사용 기준과 신청 절차를 알려 주세요.",
       },
       {
-        icon: "⌘",
+        icon: "✈️",
         color: "bg-blue-50 text-blue-500",
-        title: "코드와 문제 해결",
-        desc: "복잡한 코드를 이해하고, 해결의 실마리를 찾아요.",
-        prompt: "JavaScript의 async/await를 예제와 함께 설명해 주세요.",
+        title: "출장비 안내",
+        desc: "출장비 지급 기준과 정산 방법을 알아봐요.",
+        prompt:
+          "국내 2박 3일 출장의 여비 기준과 정산에 필요한 증빙을 알려 주세요.",
       },
       {
-        icon: "☀",
+        icon: "🎁",
+        color: "bg-pink-50 text-pink-500",
+        title: "복리후생 안내",
+        desc: "복지 혜택과 지원 조건을 확인해요.",
+        prompt: "회사 복리후생의 지원 항목과 신청 조건을 알려 주세요.",
+      },
+      {
+        icon: "📦",
         color: "bg-amber-50 text-amber-500",
-        title: "새로운 영감 찾기",
-        desc: "색다른 관점으로 아이디어의 가능성을 넓혀요.",
-        prompt: "일상에서 시작할 수 있는 창의적인 프로젝트를 제안해 주세요.",
+        title: "주문·배송 응대",
+        desc: "주문과 배송 문의의 응대 절차를 확인해요.",
+        prompt:
+          "배송 지연 문의가 들어왔을 때 확인할 사항과 고객 안내 문구를 알려 주세요.",
+      },
+      {
+        icon: "🔄",
+        color: "bg-emerald-50 text-emerald-500",
+        title: "취소·교환·반품",
+        desc: "처리 조건과 절차, 비용 기준을 알아봐요.",
+        prompt:
+          "단순 변심 반품의 접수 조건과 절차, 배송비 부담 기준을 알려 주세요.",
+      },
+      {
+        icon: "💬",
+        color: "bg-indigo-50 text-indigo-500",
+        title: "고객 불만 응대",
+        desc: "매뉴얼에 맞는 대응 방법을 찾아봐요.",
+        prompt:
+          "상품 불량으로 불만을 제기한 고객의 응대 절차와 안내 문구를 알려 주세요.",
       },
     ];
   }

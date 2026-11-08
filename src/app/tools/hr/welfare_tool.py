@@ -7,7 +7,7 @@ class WelfareTool:
     def __init__(self):
         """검색도구 설정에 필요한 변수값을 설정합니다."""
 
-        tool_desc = PromptLoader.load_text("tools/hr/travel_description.yaml")
+        tool_desc = PromptLoader.load_text("tools/hr/welfare_description.yaml")
 
         self.tool_name = "gd_hr_welfare_of_employment_tool"  # Agent Tool Name
         self.tool_description = tool_desc  # 에이전트에게 도구의 용도, 호출 조건 설명

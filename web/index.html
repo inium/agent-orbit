@@ -103,7 +103,7 @@
               반가워요!<br /><span class="text-slate-400">오늘은 무엇을 함께 할까요?</span>
             </h1>
             <p class="text-sm text-slate-400 mt-5">작은 궁금증부터 커다란 아이디어까지, Orbit에게 이야기해 주세요.</p>
-            <div class="grid sm:grid-cols-3 gap-3 mt-10">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-10">
               <template x-for="card in cards"
                 ><button
                   @click="prompt=card.prompt;$refs.input.focus()"

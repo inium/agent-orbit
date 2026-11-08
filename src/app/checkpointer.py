@@ -12,6 +12,8 @@ import sys
 from langchain_core.messages import BaseMessage
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 
+from app.api.services.checkpoint import get_conversation_checkpoint
+
 
 def format_message(message: BaseMessage | dict) -> str:
     """복원한 메시지를 역할과 본문으로 표시하며 도구 호출 정보도 포함합니다."""
@@ -43,8 +45,8 @@ async def dump_conversation(thread_id: str, checkpoint_ns: str = "") -> bool:
     async with AsyncPostgresSaver.from_conn_string(
         memory_store.connection_url()
     ) as checkpointer:
-        saved = await checkpointer.aget_tuple(
-            {"configurable": {"thread_id": thread_id, "checkpoint_ns": checkpoint_ns}}
+        saved = await get_conversation_checkpoint(
+            checkpointer, thread_id, checkpoint_ns
         )
 
     if saved is None:

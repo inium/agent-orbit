@@ -24,6 +24,41 @@ export default class ChatApp {
   }
 
   /**
+   * 서버 오류 JSON에서 사용자에게 표시할 메시지만 추출합니다.
+   *
+   * @param {unknown} data - 서버가 반환한 오류 JSON 또는 일반 텍스트
+   * @param {string} fallback - 오류 메시지를 추출할 수 없을 때 사용할 기본 문구
+   * @returns {string} 추출한 오류 메시지 또는 기본 문구
+   */
+  static errorMessage(data, fallback) {
+    if (typeof data === "string") {
+      return data.trim() || fallback;
+    }
+
+    if (!data || typeof data !== "object") {
+      return fallback;
+    }
+
+    for (const key of ["message", "detail", "error"]) {
+      const value = data[key];
+      if (typeof value === "string" && value.trim()) {
+        return value.trim();
+      }
+
+      if (Array.isArray(value)) {
+        const messages = value
+          .filter((item) => typeof item?.msg === "string")
+          .map((item) => item.msg);
+
+        if (messages.length) {
+          return messages.join("\n");
+        }
+      }
+    }
+    return fallback;
+  }
+
+  /**
    * 에이전트 스트리밍 응답을 읽고 처리하는 함수
    *
    * @param {Response} response - fetch 요청의 Response 객체
@@ -55,7 +90,18 @@ export default class ChatApp {
       }
       const payload = lines.join("\n");
       if (event === "error") {
-        throw new Error(payload || "에이전트 스트림에서 오류가 발생했습니다.");
+        let data = payload;
+        try {
+          data = JSON.parse(payload);
+        } catch {
+          // JSON이 아닌 SSE 오류는 텍스트 메시지로 처리합니다.
+        }
+        throw new Error(
+          ChatApp.errorMessage(
+            data,
+            "에이전트 스트림에서 오류가 발생했습니다.",
+          ),
+        );
       }
 
       if (event === "done" || payload === "[DONE]") {
@@ -344,8 +390,15 @@ export default class ChatApp {
       });
 
       if (!response.ok) {
+        const fallback = `에이전트 요청에 실패했습니다. (HTTP ${response.status})`;
+        let message = fallback;
+        try {
+          message = ChatApp.errorMessage(await response.json(), fallback);
+        } catch {
+          // 프록시의 HTML 오류 페이지 등은 표시하지 않고 상태 코드로 안내합니다.
+        }
         throw new Error(
-          `에이전트 요청에 실패했습니다. (HTTP ${response.status})`,
+          message === fallback ? fallback : `${fallback}\n${message}`,
         );
       }
 

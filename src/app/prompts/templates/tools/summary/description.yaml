@@ -1,0 +1,8 @@
+_type: prompt
+template: |
+  사용자가 제공한 텍스트를 요약할 때 사용합니다. 원문 전체를 text에 그대로 전달하세요.
+  최대 12,000자이며 더 긴 원문은 자르지 말고 나누어 제공하도록 안내하세요.
+  원문이 없으면 요약할 텍스트를 요청하세요. style은 paragraph 또는 bullets, focus는 강조할 주제입니다.
+  원문을 요약하고 대조하여 최대 2회 수정합니다. 외부 검색이나 사실 확인은 수행하지 않습니다.
+  반환 JSON의 summary를 전달하고 verification_passed=false이면 notice와 remaining_issues도 안내하세요.
+  도구의 대조 통과는 정확성 보장이 아닙니다. 최종 답변에서 요약에 원문 밖의 내용을 추가하지 마세요.

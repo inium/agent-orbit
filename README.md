@@ -2,9 +2,9 @@
 
 가상의 회사 (주)길동상사의 사내 규정과 쇼핑몰 고객 응대 업무를 안내하는 AI 에이전트입니다.
 
-![Orbit 업무 안내 화면](./docs/screenshot-web.png)
+![Orbit 업무 안내 화면](./docs/images/screenshot-web.png)
 
-![Orbit 대화 화면](./docs/screenshot-chat.png)
+![Orbit 대화 화면](./docs/images/screenshot-chat.png)
 
 웹 화면은 Tailwind CSS, Penguin UI, Alpine.js로 구성합니다. LangChain·LangGraph 기반 Supervisor가 질문에 따라 전문 에이전트와 도구를 호출합니다. 규정 검색에는 PostgreSQL·pgvector를, 대화 저장에는 별도 PostgreSQL 체크포인터를 사용하며, 대화·임베딩 모델은 OpenAI 모델을 사용합니다.
 

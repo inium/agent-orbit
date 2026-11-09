@@ -52,7 +52,9 @@ async def get_conversation(
     thread_id: UUID,
     request: Request,
     namespace: str = Query(
-        default="", max_length=1000, description="체크포인트 namespace"
+        default="",
+        # max_length=3000,
+        description="체크포인트 namespace",
     ),
 ) -> ConversationResponse:
     """관리자 인증 후 PostgreSQL 대화의 최신 메시지를 조회합니다."""

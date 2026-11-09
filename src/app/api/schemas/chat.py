@@ -8,7 +8,9 @@ class ChatRequest(BaseModel):
 
     thread_id: UUID = Field(default_factory=uuid4, description="스레드 고유 ID")
     message: str = Field(
-        min_length=1, max_length=1000, description="사용자가 보낸 메시지"
+        min_length=1,
+        # max_length=3000,
+        description="사용자가 보낸 메시지",
     )
 
 

@@ -246,7 +246,9 @@
                 </div>
               </div></template
             >
-            <p x-show="loading" class="text-sm text-slate-500" role="status">자료를 확인하고 있습니다…</p>
+            <p x-show="loading" class="text-sm text-slate-500 motion-safe:animate-pulse" role="status">
+              자료를 확인하고 있습니다…
+            </p>
           </div>
         </section>
         <div class="composer-area px-6 md:px-8 pb-4 pt-4">

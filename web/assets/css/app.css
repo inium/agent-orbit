@@ -162,8 +162,12 @@ select:focus-visible {
   background: var(--surface);
 }
 :root .user-message {
-  background: var(--raised);
-  color: var(--ink);
+  background: #e0e7ff;
+  color: #312e81;
+}
+:root.dark .user-message {
+  background: #2e3159;
+  color: #eef2ff;
 }
 textarea,
 select {
